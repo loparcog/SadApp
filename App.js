@@ -1,25 +1,28 @@
 import React from 'react';  
-import { SafeAreaView, View, Text, Button, Image } from 'react-native';  
+import { SafeAreaView, View, Text, Button, Image, LogBox } from 'react-native';  
 import { createAppContainer } from 'react-navigation'; 
 import { createStackNavigator } from 'react-navigation-stack' 
 import NotificationPopup from 'react-native-push-notification-popup';
+
+LogBox.ignoreAllLogs();//Ignore all log notifications
 
 // Home Screen
 class HomeScreen extends React.Component {  
     render() {  
         return (  
             <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>  
-                <Text>Home Screen</Text>  
+                <Text style={{fontSize: 50}}>Welcome Back!</Text>
+                <Image
+                    source={require("./assets/lb.png")}
+                    style={{width: "90%", height: "35%"}}/>  
                 <Button  
                     title="Go to Feed"  
-                    onPress={() => this.props.navigation.navigate('Feed')}  
+                    onPress={() => this.props.navigation.navigate('Feed')}
                 />  
             </SafeAreaView>  
         );  
     }  
 } 
-
-// Home Functions
 
 
 
@@ -32,6 +35,10 @@ class FeedScreen extends React.Component {
             cardValue: 
             <Text>
                 Default Card
+            </Text>,
+            choiceResult:
+            <Text>
+                Default Response
             </Text>,
             watchSwipe: true,
             curr: 0
@@ -47,23 +54,23 @@ class FeedScreen extends React.Component {
                 </Text>
                 <View style={{ flexDirection:"row", alignContent: "center" }}>
                     <View style={{margin: "10%", width: "30%"}}>
-                        <Button onPress={this.updateChoiceCard(choiceComp)} title="A"/>
+                        <Button onPress={this.updateChoiceCard.bind(this)} title="A"/>
                     </View>
                     <View style={{margin: "10%", width: "30%"}}>
-                        <Button onPress={this.updateChoiceCard(choiceComp)} title="B"/>
+                        <Button onPress={this.updateChoiceCard.bind(this)} title="B"/>
                     </View>
                 </View>
             </View>
         // Set state to this, disallow swiping
         this.setState({
-            cardValue: choiceComp
+            cardValue: choiceComp,
+            choiceResult: <Text style={{textAlign: "center"}}>AAAAA</Text>
         });
     }
 
-    updateChoiceCard(curr) {
+    updateChoiceCard() {
         // Add text to the existing element
-        var newChoiceComp = <Text>This is the result</Text>
-        console.log("B")
+        var newChoiceComp = [this.state.cardValue, this.state.choiceResult]
 
         // Set state and allow scrolling
         this.setState({
@@ -76,8 +83,8 @@ class FeedScreen extends React.Component {
         // Get some image
         var imageComp = 
             <Image
-                style={{width: "90%", height: 'auto'}}
-                source={{uri: './assets/stocksad.jpg'}}
+                style={{width: "90%", height: "90%"}}
+                source={require('./assets/stocksad.jpg')}
             />
         // Set the state to this, enable swiping
         this.setState({
@@ -112,8 +119,13 @@ class FeedScreen extends React.Component {
             this.createChoiceCard()
         }
 
+        var newcurr = this.state.curr + 1
+        if (newcurr > 2){
+            newcurr = 0;
+        }
+
         this.setState({
-            curr: this.state.curr + 1
+            curr: newcurr
         })
         
     }
@@ -148,7 +160,7 @@ class FeedScreen extends React.Component {
             }}
             onTouchEnd={e => {this.setState({watchSwipe: true})}}
             style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "blue" }}>  
-                <View style={{width: "80%", height: "80%", backgroundColor: "white", borderRadius: "50px", padding: "10%"}}>
+                <View style={{width: "80%", height: "80%", backgroundColor: "white", padding: "10%"}}>
                     {this.state.cardValue}
                 </View>
                 <NotificationPopup ref={ref => this.popup = ref} />
@@ -159,11 +171,11 @@ class FeedScreen extends React.Component {
   
 const AppNavigator = createStackNavigator(  
     {  
-        Home: HomeScreen,  
+        Deprescore: HomeScreen,  
         Feed: FeedScreen  
     },  
     {  
-        initialRouteName: "Home"  
+        initialRouteName: "Deprescore"  
     }  
 );  
   
