@@ -66,7 +66,7 @@ class FeedScreen extends React.Component {
 
     // Create lists for each type of card
     // 0 > Text, 1 > Photo, 2 > Choice
-    cardList = [0,1,2,0,0,2,1,0,1,0,2];
+    cardList = [0,1,2,0,1,0,2,0,1,0,2];
     choiceListQ = ["Someone is being bullied at school or work, do you...", "Do you prefer coffee or tea?", "Do you flush every time you pee?"];
     choiceListC1 = ["Intervene", "Tea", "Yes"];
     choiceListC2 = ["Stand By", "Coffee", "No"];
@@ -143,19 +143,19 @@ class FeedScreen extends React.Component {
         if (this.state.currPhoto == 0){
             var imageComp = 
                 <Image
-                    style={{width: "90%", height: "90%"}}
+                    style={{width: "100%", height: undefined, aspectRatio: 1}}
                     source={require('./assets/saddog.png')}
                 />
         } else if (this.state.currPhoto == 1){
             var imageComp = 
                 <Image
-                    style={{width: "90%", height: "90%"}}
+                    style={{width: "100%", height: undefined, aspectRatio: 1}}
                     source={require('./assets/mike.png')}
                 />
         } else {
             var imageComp = 
                 <Image
-                    style={{width: "90%", height: "90%"}}
+                    style={{width: "100%", height: undefined, aspectRatio: 1}}
                     source={require('./assets/spot.png')}
                 />
         }
