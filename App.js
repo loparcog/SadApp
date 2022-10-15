@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, View, Text, Button } from 'react-native';  
 import { createAppContainer } from 'react-navigation'; 
 import { createStackNavigator } from 'react-navigation-stack' 
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import NotificationPopup from 'react-native-push-notification-popup';
 
 // Home Screen
 class HomeScreen extends React.Component {  
@@ -36,6 +36,18 @@ class FeedScreen extends React.Component {
         }
     }
 
+    createChoiceCard() {
+        // TODO
+    }
+
+    createPictureCard() {
+        // TODO
+    }
+
+    createTextCard() {
+
+    }
+
     changeCardValue() {
         // Get a random text string
         var val = Math.floor(Math.random() * 1000);
@@ -63,6 +75,12 @@ class FeedScreen extends React.Component {
                         console.log('Swiped down');
                         this.changeCardValue();
                         this.watchSwipe = false;
+                        this.popup.show({
+                            appTitle: 'Trauma Trophy',
+                            title: 'Doomscroller',
+                            body: 'Perform a scroll down!',
+                            slideOutTime: 5000
+                        });
                     }
                 }
             }}
@@ -73,6 +91,7 @@ class FeedScreen extends React.Component {
                 <View style={{width: "80%", height: "80%", backgroundColor: "white", borderRadius: "50px", padding: "10%"}}>
                     {this.state.cardValue}
                 </View>
+                <NotificationPopup ref={ref => this.popup = ref} />
             </SafeAreaView> 
     );  
     }  
