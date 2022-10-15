@@ -1,27 +1,79 @@
 import React from 'react';  
-import { SafeAreaView, Text, Button } from 'react-native';  
+import { SafeAreaView, View, Text, Button } from 'react-native';  
 import { createAppContainer } from 'react-navigation'; 
 import { createStackNavigator } from 'react-navigation-stack' 
-  
+import { PanGestureHandler } from 'react-native-gesture-handler';
+
+// Home Screen
 class HomeScreen extends React.Component {  
     render() {  
         return (  
             <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>  
                 <Text>Home Screen</Text>  
                 <Button  
-                    title="Go to Profile"  
-                    onPress={() => this.props.navigation.navigate('Profile')}  
+                    title="Go to Feed"  
+                    onPress={() => this.props.navigation.navigate('Feed')}  
                 />  
             </SafeAreaView>  
         );  
     }  
-}  
-class ProfileScreen extends React.Component {  
+} 
+
+// Home Functions
+
+
+
+// Card Screen
+class FeedScreen extends React.Component { 
+    
+    constructor() {
+        super();
+        this.state = {
+            cardValue: 
+            <Text>
+                Default Card
+            </Text>
+        }
+    }
+
+    changeCardValue() {
+        // Get a random text string
+        var val = Math.floor(Math.random() * 1000);
+        console.log(val);
+        this.setState({
+            cardValue:  
+            <Text>
+                {val}
+            </Text>
+        });
+    }
+    
     render() {  
         return (  
-            <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>  
-                <Text>Profile Screen</Text>  
-            </SafeAreaView>  
+            <SafeAreaView 
+            onTouchStart={e=> this.touchY = e.nativeEvent.pageY}
+            onTouchMove={e => {
+                if (this.watchSwipe){
+                    if (this.touchY - e.nativeEvent.pageY > 20){
+                        console.log('Swiped up');
+                        this.changeCardValue();
+                        this.watchSwipe = false;
+                    }
+                    if (this.touchY - e.nativeEvent.pageY < -20){
+                        console.log('Swiped down');
+                        this.changeCardValue();
+                        this.watchSwipe = false;
+                    }
+                }
+            }}
+            onTouchEnd={e => {
+                this.watchSwipe = true;
+            }}
+            style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "blue" }}>  
+                <View style={{width: "80%", height: "80%", backgroundColor: "white", borderRadius: "50px", padding: "10%"}}>
+                    {this.state.cardValue}
+                </View>
+            </SafeAreaView> 
     );  
     }  
 }  
@@ -29,7 +81,7 @@ class ProfileScreen extends React.Component {
 const AppNavigator = createStackNavigator(  
     {  
         Home: HomeScreen,  
-        Profile: ProfileScreen  
+        Feed: FeedScreen  
     },  
     {  
         initialRouteName: "Home"  
