@@ -1,20 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import React from 'react';  
+import { SafeAreaView, Text, Button } from 'react-native';  
+import { createAppContainer } from 'react-navigation'; 
+import { createStackNavigator } from 'react-navigation-stack' 
+  
+class HomeScreen extends React.Component {  
+    render() {  
+        return (  
+            <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>  
+                <Text>Home Screen</Text>  
+                <Button  
+                    title="Go to Profile"  
+                    onPress={() => this.props.navigation.navigate('Profile')}  
+                />  
+            </SafeAreaView>  
+        );  
+    }  
+}  
+class ProfileScreen extends React.Component {  
+    render() {  
+        return (  
+            <SafeAreaView style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>  
+                <Text>Profile Screen</Text>  
+            </SafeAreaView>  
+    );  
+    }  
+}  
+  
+const AppNavigator = createStackNavigator(  
+    {  
+        Home: HomeScreen,  
+        Profile: ProfileScreen  
+    },  
+    {  
+        initialRouteName: "Home"  
+    }  
+);  
+  
+const AppContainer = createAppContainer(AppNavigator);  
+export default class App extends React.Component {  
+    render() {  
+        return <AppContainer />;  
+    }  
+}  
