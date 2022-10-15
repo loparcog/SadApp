@@ -1,14 +1,14 @@
 import React from 'react';  
-import { SafeAreaView, View, Text, Button, Image, LogBox } from 'react-native';  
+import { SafeAreaView, View, Text, Button, Image } from 'react-native';  
 import { createAppContainer } from 'react-navigation'; 
 import { createStackNavigator } from 'react-navigation-stack' 
 import NotificationPopup from 'react-native-push-notification-popup';
 
-LogBox.ignoreAllLogs();//Ignore all log notifications
-
 // Home Screen
 class HomeScreen extends React.Component {  
     render() {  
+        const { navigate } = this.props.navigation;
+
         return (  
             <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>  
                 <Text style={{fontSize: 50}}>Welcome Back!</Text>
@@ -17,13 +17,12 @@ class HomeScreen extends React.Component {
                     style={{width: "90%", height: "35%"}}/>  
                 <Button  
                     title="Go to Feed"  
-                    onPress={() => this.props.navigation.navigate('Feed')}
+                    onPress={() => navigate('Feed')}
                 />  
             </SafeAreaView>  
         );  
     }  
 } 
-
 
 
 // Card Screen
@@ -41,7 +40,8 @@ class FeedScreen extends React.Component {
                 Default Response
             </Text>,
             watchSwipe: true,
-            curr: 0
+            curr: 0,
+            optionChosen: false
         }
     }
 
@@ -64,19 +64,23 @@ class FeedScreen extends React.Component {
         // Set state to this, disallow swiping
         this.setState({
             cardValue: choiceComp,
-            choiceResult: <Text style={{textAlign: "center"}}>AAAAA</Text>
+            choiceResult: <Text style={{textAlign: "center"}}>AAAAA</Text>,
+            optionChosen: false
         });
     }
 
     updateChoiceCard() {
         // Add text to the existing element
-        var newChoiceComp = [this.state.cardValue, this.state.choiceResult]
+        if(!this.state.optionChosen){
+            var newChoiceComp = [this.state.cardValue, this.state.choiceResult]
 
-        // Set state and allow scrolling
-        this.setState({
-            cardValue: newChoiceComp,
-            watchSwipe: true
-        })
+            // Set state and allow scrolling
+            this.setState({
+                cardValue: newChoiceComp,
+                watchSwipe: true,
+                optionChosen: true
+            })
+        }
     }
 
     createPictureCard() {
@@ -160,7 +164,7 @@ class FeedScreen extends React.Component {
             }}
             onTouchEnd={e => {this.setState({watchSwipe: true})}}
             style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "blue" }}>  
-                <View style={{width: "80%", height: "80%", backgroundColor: "white", padding: "10%"}}>
+                <View style={{width: "80%", height: "80%", backgroundColor: "white", borderRadius: 15, overflow: 'hidden', padding: "10%"}}>
                     {this.state.cardValue}
                 </View>
                 <NotificationPopup ref={ref => this.popup = ref} />
